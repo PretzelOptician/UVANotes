@@ -24,7 +24,9 @@ CREATE TABLE Course (
 CREATE TABLE Note (
     id INT AUTO_INCREMENT PRIMARY KEY,
     course_id INT NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Course(id)
+    computing_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES Course(id),
+    FOREIGN KEY (computing_id) REFERENCES User(computing_id)
 );
 
 CREATE TABLE Schedule (
