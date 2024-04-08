@@ -1,4 +1,7 @@
 <?php
+
+// NOTE: WE ARE NOT INCLUDING THIS IN THE FINAL PROJECT. THIS IS JUST FOR REFERENCE WHEN BUILDING OUR APP.
+
 function addRequests($reqDate, $roomNumber, $reqBy, $repairDesc, $reqPriority)
 {
    global $db;   
