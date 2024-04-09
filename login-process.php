@@ -28,6 +28,7 @@ isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["computi
         if(password_verify($_POST["password"], $user[0]["password"]) && $_POST['username'] === $user[0]['name']){
             $_SESSION['name'] = $name;
             $_SESSION['computingId'] = $computingId;
+            $_SESSION['errorMessage'] = '';
             header("Location: departments.php");
         }
         else{

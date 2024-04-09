@@ -25,7 +25,7 @@ session_start();
             <label for="username">Computing ID</label>
             <input type="text" name="computingId" id="computingId" class="login-input" required>
             <label for="password">Password</label>
-            <input type="text" name="password" id="password" class="login-input" required>
+            <input type="password" name="password" id="password" class="login-input" required>
             <button type="submit" class="login-button">Submit</button>
         </form>
         <?php
