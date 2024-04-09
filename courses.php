@@ -41,7 +41,7 @@ $list_of_courses = getCoursesForDept($deptCode);
     </div>
     <div class="course-container" id="courseContainer">
         <?php foreach ($list_of_courses as $course): ?>
-            <button class="course-button">
+            <button class="course-button" onclick="window.location.href='notes.php?course=<?= urlencode($course['id']) ?>';">
                 <h5><?= htmlspecialchars($course['name']) ?> - <?= htmlspecialchars($course['professor_name']) ?></h5>
             </button>
         <?php endforeach; ?>
