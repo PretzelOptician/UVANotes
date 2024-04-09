@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,12 +17,8 @@
 </head>
 <body>
     <h1 class="welcome">Welcome to UVA Notes!</h1>
-    <h2 class="form">Please use the following form to login and register.</h2>
-        <?php
-            if (isset($_SESSION['errorMessage'])){
-                echo $_SESSION['errorMessage'];
-            }
-        ?>
+    <h2 class="form">Please use the following form to login and register</h2>
+    <p class="instruction">If you already have an account please ensure your computing ID is correct before attempting to sign in. If you are a new user, just fill out your information and click Submit and an account will be created for you.</p>
         <form action="login-process.php" method="POST" class="login-form">
             <label for="username">Username</label>
             <input type="text" name="username" id="name" class="login-input" required>
@@ -28,4 +28,9 @@
             <input type="text" name="password" id="password" class="login-input" required>
             <button type="submit" class="login-button">Submit</button>
         </form>
+        <?php
+            if (isset($_SESSION['errorMessage'])){
+                echo "<div class='error'>" . $_SESSION['errorMessage'] . "</div>";
+            }
+        ?>
 </body>

@@ -25,7 +25,7 @@ function getCoursesForDept($dept_code)
    return $result;
 }
 
-function getUser($username, $computingId){
+function getUser($username, $computingId, $password){
    global $db;
 
    $query = "select * from User where computing_id='" . $computingId . "';";
@@ -37,14 +37,15 @@ function getUser($username, $computingId){
    return $result;
 }
 
-function insertUser($username, $computingId)
+function insertUser($username, $computingId, $password)
 {
    global $db;
 
-   $query = "INSERT INTO User (computing_id, name) VALUES (:computingId, :username)";
+   $query = "INSERT INTO User (computing_id, name, password) VALUES (:computingId, :username, :password)";
    $statement = $db->prepare($query);
    $statement->bindParam(':computingId', $computingId);
    $statement->bindParam(':username', $username);
+   $statement->bindParam(':password', $password);
    
    $success = $statement->execute();
    $statement->closeCursor();

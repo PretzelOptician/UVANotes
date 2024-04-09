@@ -7,18 +7,14 @@ require("database-requests.php");
 if(isset($_POST["username"]) && !empty($_POST["username"]) &&
 isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["computingId"]) && !empty($_POST["computingId"])) {
 
-    echo $_POST['username'];
-    echo $_POST['computingId'];
-    echo $_POST['password'];
-
     $name = $_POST["username"];
     $computingId = $_POST['computingId'];
-    $password = $_POST['password'];
+    $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $user = getUser($name, $computingId);
+    $user = getUser($name, $computingId, $hashed_password);
 
     if (empty($user)){
-        $success = insertUser($name, $computingId);
+        $success = insertUser($name, $computingId, $hashed_password);
 
         if($success) {
             header("Location: departments.php");
@@ -29,8 +25,14 @@ isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["computi
         }
     }
     else{
-        $_SESSION['name'] = $name;
-        $_SESSION['computingId'] = $computingId;
-        header("Location: departments.php");
+        if(password_verify($_POST["password"], $user[0]["password"]) && $_POST['username'] === $user[0]['name']){
+            $_SESSION['name'] = $name;
+            $_SESSION['computingId'] = $computingId;
+            header("Location: departments.php");
+        }
+        else{
+            $_SESSION['errorMessage'] = "Incorrect computing ID or password";
+            header("Location: login.php");
+        }
     }
 }
