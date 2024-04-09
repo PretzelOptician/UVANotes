@@ -39,7 +39,9 @@
 
 /** S24, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
 $username = 'aps4yj'; 
-$password = 'Chiapet1!';
+$env = parse_ini_file('.env');
+$header = $env["HEADER"];
+$password = $env["DB_PASSWORD"];
 $host = 'mysql01.cs.virginia.edu';
 $dbname = 'aps4yj';
 $dsn = "mysql:host=$host;dbname=$dbname";
