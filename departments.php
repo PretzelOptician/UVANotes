@@ -1,4 +1,5 @@
 <?php 
+session_start();
 require("connect-db.php");    // include("connect-db.php");
 require("database-requests.php");
 ?>
@@ -27,7 +28,7 @@ $list_of_depts = getAllDepartments();
 <div class="container">
   <div class="row g-3 mt-2">
     <div class="col">
-      <h2>Select a Department</h2>
+      <h2>Select a Department, <?php echo $_SESSION['name']; ?></h2>
     </div>  
   </div>
 </div>

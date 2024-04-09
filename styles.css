@@ -55,3 +55,55 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.welcome{
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    padding-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 4rem;
+    width: 30%;
+    margin: auto;
+}
+
+label[for="username"]{
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+label[for="password"]{
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+.login-input{
+    border-color: black;
+    border-radius: 2rem;
+    padding: 6px;
+    padding-left: 12px;
+}
+
+.login-button{
+    width: 40%;
+    height: 40px;
+    margin: auto;
+    margin-top: 10px; 
+    border-radius: 1rem;
+}
+
+.login-button:hover{
+    scale: 1.05
+}
