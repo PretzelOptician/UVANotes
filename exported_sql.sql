@@ -25083,7 +25083,8 @@ INSERT INTO `Schedule` (`id`, `computing_id`, `course_id`) VALUES
 
 CREATE TABLE `User` (
   `computing_id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) NOT NULL,
+  'password' varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
