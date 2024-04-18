@@ -11,7 +11,7 @@
         <ul class="navbar-nav ms-auto">
           <?php if (!isset($_SESSION['name'])) { ?>              
             <li class="nav-item">
-              <a class="nav-link" href="login.php">Register</a>
+              <a class="nav-link" href="register.php">Register</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="login.php">Sign in</a>
