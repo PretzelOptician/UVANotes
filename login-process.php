@@ -14,15 +14,8 @@ isset($_POST["password"]) && !empty($_POST["password"]) && isset($_POST["computi
     $user = getUser($name, $computingId, $hashed_password);
 
     if (empty($user)){
-        $success = insertUser($name, $computingId, $hashed_password);
-
-        if($success) {
-            header("Location: departments.php");
-            exit();
-        } else {
-            header("Location: login.php");
-            exit();
-        }
+        $_SESSION['errorMessage'] = "A user with this computing ID does not exist. Register an account with us to get started!";
+        header("Location: login.php");
     }
     else{
         if(password_verify($_POST["password"], $user[0]["password"]) && $_POST['username'] === $user[0]['name']){
