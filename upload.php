@@ -1,3 +1,8 @@
+<?php 
+require("connect-db.php");    // include("connect-db.php");
+require("database-requests.php");
+?>
+
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
@@ -12,9 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dest_path = './notes/' . $fileName;
             // instead of move_uploaded_file, might need to use a file storage server
             if(move_uploaded_file($fileTmpPath, $dest_path)) {
-                $redirectURL = 'notes.php?course=' . $_POST['redirect_url']; 
-                header("Location: $redirectURL");
-                echo 'File is successfully uploaded.';
+                $success = uploadNote($_POST['course_id'], $_SESSION['computingId']);
+                if($success) {
+                    $redirectURL = 'notes.php?course=' . $_POST['course_id']; 
+                    header("Location: $redirectURL");
+                    echo 'File is successfully uploaded.';
+                }
             } else {
                 echo 'There was some error moving the file to upload directory.';
             }

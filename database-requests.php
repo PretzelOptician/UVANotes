@@ -67,4 +67,17 @@ function insertUser($username, $computingId, $password)
    return $success;
 }
 
+function uploadNote($course_id, $computing_id) 
+{
+   global $db;
+   $query = "INSERT INTO Note (course_id, computing_id) VALUES (" . $course_id . ", '" . $computing_id . "')";
+   // echo $query;
+   $statement = $db->prepare($query);
+
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
 ?>

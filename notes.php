@@ -81,7 +81,7 @@ $list_of_notes = getNotesForCourse($course);
         <form action="upload.php" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="file">File:</label>
-            <input type="hidden" name="redirect_url" value=<?php echo htmlspecialchars($course); ?>>
+            <input type="hidden" name="course_id" value=<?php echo htmlspecialchars($course); ?>>
             <input type="file" class="form-control" id="file" name="file" accept=".pdf" required>
           </div>
           <div class="form-group mt-2">
