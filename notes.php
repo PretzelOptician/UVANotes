@@ -37,6 +37,9 @@ $list_of_notes = getNotesForCourse($course);
 </div>
 <div class="container">
     <h3>Notes</h3>
+    <div class="container">
+      <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
+    </div>
     <!-- <div class="search-container">
         <input type="text" id="searchCourse" onkeyup="searchCourses()" placeholder="Search for Courses">
     </div> -->
@@ -66,6 +69,40 @@ $list_of_notes = getNotesForCourse($course);
 <?php include('footer.html') ?> 
 <!-- <script src='courses.js'></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<div id="uploadModal" class="modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload a Note</h5>
+        <button type="button" class="close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="file">File:</label>
+            <input type="hidden" name="redirect_url" value=<?php echo htmlspecialchars($course); ?>>
+            <input type="file" class="form-control" id="file" name="file" accept=".pdf" required>
+          </div>
+          <div class="form-group mt-2">
+            <button type="submit" class="btn btn-success">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  document.getElementById('uploadModal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('uploadModal').style.display = 'none';
+}
+</script>
+
 </body>
 
 </html>
