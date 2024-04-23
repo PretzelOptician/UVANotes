@@ -10,7 +10,17 @@ if (isset($_GET['course'])){ //check to see if 'page' is set.
     $course= $_GET['course']; //then set a variable equal to the parameter.
 }
 $list_of_notes = getNotesForCourse($course);
+$userHasUploaded = false;
 
+if (isset($_SESSION['computingId'])) {
+    foreach ($list_of_notes as $note) {
+        if ($note['computing_id'] == $_SESSION['computingId']) {
+            $userHasUploaded = true;
+            $uploadedNoteId = $note['note_id'];
+            break;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,9 +47,57 @@ $list_of_notes = getNotesForCourse($course);
 </div>
 <div class="container">
     <h3>Notes</h3>
-    <div class="container">
-      <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
-    </div>
+    <?php if ($userHasUploaded): ?>
+        <!-- Delete Button with Modal -->
+        <button class="btn btn-danger" onclick="showConfirmModal()">Delete Note</button>
+
+        <!-- Re-upload Button -->
+        <button class="btn btn-primary" onclick="openReuploadModal()">Re-upload Note</button>
+
+        <!-- Confirm Delete Modal -->
+        <div id="confirmModal" class="modal" style="display:none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Deletion</h5>
+                        <button type="button" class="close" onclick="closeConfirmModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this note?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="deleteNote()">Delete</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Re-upload Modal (similar to Add Note modal) -->
+        <div id="reuploadModal" class="modal" style="display:none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Re-upload a Note</h5>
+                        <button type="button" class="close" onclick="closeReuploadModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="upload.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="note_id" value="<?php echo $uploadedNoteId; ?>">
+                            <input type="hidden" name="course_id" value=<?php echo htmlspecialchars($course); ?>>
+                            <input type="file" class="form-control" id="file" name="file" accept=".pdf" required>
+                            <div class="form-group mt-2">
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php else: ?>
+        <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
+    <?php endif; ?>
     <!-- <div class="search-container">
         <input type="text" id="searchCourse" onkeyup="searchCourses()" placeholder="Search for Courses">
     </div> -->
@@ -58,7 +116,15 @@ $list_of_notes = getNotesForCourse($course);
             <td><?php echo $note['computing_id']; ?></td>
             <td><?php echo $note['date_uploaded']; ?></td>        
             <td><?php echo $note['average_rating']; ?>/5</td>    
-            <td><a href="../notes/example.pdf">View Note</a></td>
+            <?php
+            $checkPath = "notes/" . $note['computing_id'] . ".pdf";
+            if (file_exists($checkPath)) {
+                $filePath = "../notes/" . $note['computing_id'] . ".pdf";
+            } else {
+                $filePath = "../notes/example.pdf";
+            }
+            ?>
+            <td><a href="<?php echo htmlspecialchars($filePath); ?>">View Note</a></td>
             
         </tr>
         <?php endforeach; ?>  
@@ -81,6 +147,7 @@ $list_of_notes = getNotesForCourse($course);
         <form action="upload.php" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="file">File:</label>
+            <input type="hidden" name="action" value="upload">
             <input type="hidden" name="course_id" value=<?php echo htmlspecialchars($course); ?>>
             <input type="file" class="form-control" id="file" name="file" accept=".pdf" required>
           </div>
@@ -95,11 +162,25 @@ $list_of_notes = getNotesForCourse($course);
 
 <script>
 function openModal() {
-  document.getElementById('uploadModal').style.display = 'block';
+    document.getElementById('uploadModal').style.display = 'block';
 }
-
 function closeModal() {
-  document.getElementById('uploadModal').style.display = 'none';
+    document.getElementById('uploadModal').style.display = 'none';
+}
+function showConfirmModal() {
+    document.getElementById('confirmModal').style.display = 'block';
+}
+function closeConfirmModal() {
+    document.getElementById('confirmModal').style.display = 'none';
+}
+function openReuploadModal() {
+    document.getElementById('reuploadModal').style.display = 'block';
+}
+function closeReuploadModal() {
+    document.getElementById('reuploadModal').style.display = 'none';
+}
+function deleteNote() {
+    window.location.href = 'delete_note.php?note_id=<?php echo $uploadedNoteId; ?>&course_id=<?php echo $course; ?>';
 }
 </script>
 

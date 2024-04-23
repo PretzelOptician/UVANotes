@@ -71,8 +71,52 @@ function uploadNote($course_id, $computing_id)
 {
    global $db;
    $query = "INSERT INTO Note (course_id, computing_id) VALUES (" . $course_id . ", '" . $computing_id . "')";
-   // echo $query;
    $statement = $db->prepare($query);
+
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
+function getNoteById($id) 
+{
+   global $db;
+
+   $query = "SELECT * FROM Note WHERE id=:id";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':id', $id);
+   
+   $success = $statement->execute();
+   
+   $result = $statement->fetchAll();
+   $statement->closeCursor();
+
+   return $result;
+}
+
+function deleteNoteById($id) 
+{
+   global $db;
+
+   $query = "DELETE FROM Note WHERE id=:id";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':id', $id);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
+function reuploadNote($id, $new_date) 
+{
+   global $db;
+   
+   $query = "UPDATE Note SET date_uploaded=:new_date WHERE id=:id";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':id', $id);
+   $statement->bindParam(':new_date', $new_date);
 
    $success = $statement->execute();
    $statement->closeCursor();

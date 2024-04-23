@@ -1,6 +1,11 @@
 <?php 
-require("connect-db.php");    // include("connect-db.php");
+require("connect-db.php");
 require("database-requests.php");
+
+if (!isset($_SESSION['computingId'])) {
+    header('Location: login.php');
+    exit;
+}
 ?>
 
 <?php
@@ -14,18 +19,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $fileExtension = strtolower(end($fileNameCmps));
 
         if ($fileExtension == 'pdf') {
-            $dest_path = './notes/' . $fileName;
-            // instead of move_uploaded_file, might need to use a file storage server
-            if(move_uploaded_file($fileTmpPath, $dest_path)) {
-                $success = uploadNote($_POST['course_id'], $_SESSION['computingId']);
-                if($success) {
-                    $redirectURL = 'notes.php?course=' . $_POST['course_id']; 
-                    header("Location: $redirectURL");
-                    echo 'File is successfully uploaded.';
+            if($_POST['action']=='update') {
+                $dest_path = './notes/' . $_SESSION['computingId'] . '.pdf';
+                $new_date = date('Y-m-d');
+                // instead of move_uploaded_file, might need to use a file storage server
+                unlink($dest_path);
+                if(move_uploaded_file($fileTmpPath, $dest_path)) {
+                    $success = reuploadNote($_POST['note_id'], $new_date);
+                    if($success) {
+                        $redirectURL = 'notes.php?course=' . $_POST['course_id']; 
+                        header("Location: $redirectURL");
+                        echo 'File is successfully uploaded.';
+                    }
+                } else {
+                    echo 'There was some error moving the file to upload directory.';
                 }
-            } else {
-                echo 'There was some error moving the file to upload directory.';
+            } else if ($_POST['action']=='upload') {
+                $dest_path = './notes/' . $_SESSION['computingId'] . '.pdf';
+                // instead of move_uploaded_file, might need to use a file storage server
+                if(move_uploaded_file($fileTmpPath, $dest_path)) {
+                    $success = uploadNote($_POST['course_id'], $_SESSION['computingId']);
+                    if($success) {
+                        $redirectURL = 'notes.php?course=' . $_POST['course_id']; 
+                        header("Location: $redirectURL");
+                        echo 'File is successfully uploaded.';
+                    }
+                } else {
+                    echo 'There was some error moving the file to upload directory.';
+                }
             }
+            
         } else {
             echo 'Upload failed. Allowed file types: PDF.';
         }
