@@ -67,6 +67,26 @@ function insertUser($username, $computingId, $password)
    return $success;
 }
 
+function updateUser($username)
+{
+   global $db;
+
+   $computingId = $_SESSION['computingId'];
+   $query = "UPDATE User SET name=:username WHERE computing_id=:computingId";
+
+   $statement = $db->prepare($query);
+   $statement->bindParam(':username', $username);
+   $statement->bindParam(':computingId', $computingId);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+      
+   $_SESSION['name'] = $username;
+   $_SESSION['profileError'] = '';
+
+   return $success;
+}
+
 function uploadNote($course_id, $computing_id) 
 {
    global $db;

@@ -38,6 +38,9 @@ if (isset($_SESSION['computingId'])) {
 </head>
 
 <body>  
+<div class="nav" style="padding: 16px;">
+    <a href="departments.php" style="text-decoration: none;">Back to Departments</a>
+</div>
 <div class="container">
   <div class="row g-3 mt-2">
     <div class="col">
@@ -132,7 +135,7 @@ if (isset($_SESSION['computingId'])) {
     </table>
 </div>   
 <br/><br/>
-<?php include('footer.html') ?> 
+<?php include('footer.html') ?>
 <!-- <script src='courses.js'></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
