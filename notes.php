@@ -6,6 +6,8 @@ require("database-requests.php");
 
 <?php 
 
+$schedule = getSchedule($_SESSION['computingId']);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     if (isset($_GET['course'])){
         $course= $_GET['course'];
@@ -26,6 +28,12 @@ if (isset($_SESSION['computingId'])) {
             $uploadedNoteId = $note['note_id'];
             break;
         }
+    }
+}
+$courseAdded = true;
+foreach ($schedule as $eachCourse){
+    if (in_array($course, $eachCourse)){
+        $courseAdded = false;
     }
 }
 ?>
@@ -105,9 +113,11 @@ if (isset($_SESSION['computingId'])) {
     <?php else: ?>
         <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
     <?php endif; ?>
+    <?php if ($courseAdded): ?>
         <form action="notes.php?course=<?php echo $course ?>" method="POST">
             <button type="submit" class="btn btn-secondary">Add course to schedule</button>
         </form>
+    <?php endif; ?>
     <!-- <div class="search-container">
         <input type="text" id="searchCourse" onkeyup="searchCourses()" placeholder="Search for Courses">
     </div> -->
