@@ -42,8 +42,7 @@ $list_of_depts = getAllDepartments();
         <?php foreach ($list_of_depts as $dept): ?>
             <button class="dept-button" onclick="window.location.href='courses.php?dept=<?= urlencode($dept['code']) ?>';">
                 <h5><?= htmlspecialchars($dept['code']) ?></h5>
-                <!-- <br> -->
-                <!-- <?= htmlspecialchars($dept['name']) ?> -->
+                <?= htmlspecialchars($dept['name']) ?>
             </button>
         <?php endforeach; ?>
     </div>

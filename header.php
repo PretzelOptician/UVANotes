@@ -27,6 +27,9 @@
               <a class="nav-link" href="profile.php">Profile</a>
             </li>   
             <li class="nav-item">                  
+              <a class="nav-link" href="schedule.php">Schedule</a>
+            </li>   
+            <li class="nav-item">                  
               <a class="nav-link" href="signout.php">Sign out</a>
             </li>
           <?php } ?>

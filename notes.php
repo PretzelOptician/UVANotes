@@ -6,8 +6,15 @@ require("database-requests.php");
 
 <?php 
 
-if (isset($_GET['course'])){ //check to see if 'page' is set.
-    $course= $_GET['course']; //then set a variable equal to the parameter.
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if (isset($_GET['course'])){
+        $course= $_GET['course'];
+    }
+    $success = addScheduleCourse($_SESSION['computingId'], $course);
+}
+
+if (isset($_GET['course'])){
+    $course= $_GET['course'];
 }
 $list_of_notes = getNotesForCourse($course);
 $userHasUploaded = false;
@@ -51,13 +58,10 @@ if (isset($_SESSION['computingId'])) {
 <div class="container">
     <h3>Notes</h3>
     <?php if ($userHasUploaded): ?>
-        <!-- Delete Button with Modal -->
         <button class="btn btn-danger" onclick="showConfirmModal()">Delete Note</button>
 
-        <!-- Re-upload Button -->
         <button class="btn btn-primary" onclick="openReuploadModal()">Re-upload Note</button>
 
-        <!-- Confirm Delete Modal -->
         <div id="confirmModal" class="modal" style="display:none;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -101,6 +105,9 @@ if (isset($_SESSION['computingId'])) {
     <?php else: ?>
         <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
     <?php endif; ?>
+        <form action="notes.php?course=<?php echo $course ?>" method="POST">
+            <button type="submit" class="btn btn-secondary">Add course to schedule</button>
+        </form>
     <!-- <div class="search-container">
         <input type="text" id="searchCourse" onkeyup="searchCourses()" placeholder="Search for Courses">
     </div> -->

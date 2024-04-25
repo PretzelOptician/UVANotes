@@ -1,12 +1,12 @@
 <?php 
-require("connect-db.php");    // include("connect-db.php");
+require("connect-db.php");
 require("database-requests.php");
 ?>
 
 <?php 
 
-if (isset($_GET['dept'])){ //check to see if 'page' is set.
-    $deptCode= $_GET['dept']; //then set a variable equal to the parameter.
+if (isset($_GET['dept'])){
+    $deptCode= $_GET['dept'];
 }
 $list_of_courses = getCoursesForDept($deptCode);
 
@@ -43,7 +43,7 @@ $list_of_courses = getCoursesForDept($deptCode);
     <div class="course-container" id="courseContainer">
         <?php foreach ($list_of_courses as $course): ?>
             <button class="course-button" onclick="window.location.href='notes.php?course=<?= urlencode($course['id']) ?>';">
-                <h5><?= htmlspecialchars($course['name']) ?> - <?= htmlspecialchars($course['professor_name']) ?></h5>
+                <h5 style="overflow:hidden;"><?= htmlspecialchars($course['name']) ?> - <?= htmlspecialchars($course['professor_name']) ?></h5>
             </button>
         <?php endforeach; ?>
     </div>

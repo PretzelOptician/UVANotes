@@ -15,7 +15,7 @@
 }
 
 .course-button {
-    width: 30%;
+    width: 25%;
     height: 10%;
     background-color: #feffce;
     margin: 10px;
@@ -182,5 +182,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+.schedule-container{
+    display: flex;
+    flex-direction: column;
     justify-content: center;
 }

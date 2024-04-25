@@ -144,4 +144,51 @@ function reuploadNote($id, $new_date)
    return $success;
 }
 
+function addScheduleCourse($computingId, $courseId)
+{
+   global $db;
+
+   $query = "INSERT INTO Schedule (computing_id, course_id) VALUES (:computingId, :courseId)";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':courseId', $courseId);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
+function getSchedule($computingId)
+{
+   global $db;
+
+   $query = "SELECT DISTINCT Course.name, Course.dept_code, Course.professor_name, Course.id FROM Course JOIN Schedule ON Course.id = Schedule.course_id WHERE Schedule.computing_id=:computingId;";
+
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   
+   $statement->execute();
+   $result = $statement->fetchAll();
+   $statement->closeCursor();
+
+   return $result;
+}
+
+function deleteClassFromSchedule($computingId, $courseId)
+{
+   global $db;
+
+   $query = "DELETE FROM Schedule WHERE computing_id=:computingId AND course_id=:courseId";
+
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':courseId', $courseId);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
 ?>
