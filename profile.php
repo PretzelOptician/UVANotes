@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     <form action="profile.php" method="POST" style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
         <label for="name">Change Username</label>
         <input type="text" name="usernameChange" class="login-input">
-        <button type="submit" class="login-button">Submit Changes</button>
+        <button type="submit" class="login-button" style="width:200px;">Submit Changes</button>
     </form>
     <?php if (isset($_SESSION['profileError'])){
         echo "<p style='color: red; text-align: center; padding-top: 10px;'>" . $_SESSION['profileError'] . "</p>";

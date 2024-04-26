@@ -191,4 +191,79 @@ function deleteClassFromSchedule($computingId, $courseId)
    return $success;
 }
 
+function addFavorite($computingId, $noteId, $courseId)
+{
+   global $db;
+   $query = "SELECT * FROM Favorite WHERE computing_id=:computingId AND note_id=:noteId AND course_id=:courseId";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':noteId', $noteId);
+   $statement->bindParam(':courseId', $courseId);
+   $statement->execute();
+   $result = $statement->fetchAll();
+   if (count($result) > 0){
+      return false;
+   }
+   else{
+      $query = "INSERT INTO Favorite (computing_id, note_id, course_id) VALUES (:computingId, :noteId, :courseId)";
+      $statement = $db->prepare($query);
+      $statement->bindParam(':computingId', $computingId);
+      $statement->bindParam(':noteId', $noteId);
+      $statement->bindParam(':courseId', $courseId);
+      
+      $success = $statement->execute();
+      $statement->closeCursor();
+   
+      return $success;
+   }
+}
+
+function deleteFavorite($computingId, $noteId, $courseId)
+{
+   global $db;
+
+   $query = "DELETE FROM Favorite WHERE computing_id=:computingId AND note_id=:noteId AND course_id=:courseId";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':noteId', $noteId);
+   $statement->bindParam(':courseId', $courseId);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
+function getFavorite($computingId, $courseId)
+{
+   global $db;
+
+   $query = "SELECT Note.computing_id, Favorite.note_id FROM Note JOIN Favorite ON Note.id=Favorite.note_id WHERE Favorite.computing_id=:computingId AND Note.course_id=:courseId";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':courseId', $courseId);
+
+   $statement->execute();
+   $result = $statement->fetchAll();
+   $statement->closeCursor();
+
+   return $result;
+}
+
+function getFavoriteByNoteID($computingId, $noteId, $courseId)
+{
+   global $db;
+
+   $query = "SELECT * FROM Favorite WHERE computing_id=:computingId AND note_id=:noteId AND course_id=:courseId";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':computingId', $computingId);
+   $statement->bindParam(':noteId', $noteId);
+   $statement->bindParam(':courseId', $courseId);
+
+   $statement->execute();
+   $result = $statement->fetchAll();
+   $statement->closeCursor();
+
+   return $result;
+}
 ?>

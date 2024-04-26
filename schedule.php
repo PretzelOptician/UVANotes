@@ -3,12 +3,18 @@ session_start();
 require("connect-db.php"); 
 require("database-requests.php");
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if ($_POST['courseID']){
+        $courseId = $_POST['courseID'];
+        deleteClassFromSchedule($_SESSION['computingId'], $courseId);
+    }
+    if ($_POST['note_id']){
+        deleteFavorite($_SESSION['computingId'], $_POST['note_id'], $_POST['course_id']);
+    }
+}
+
 $schedule = getSchedule($_SESSION['computingId']);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $courseId = $_POST['courseID'];
-    deleteClassFromSchedule($_SESSION['computingId'], $courseId);
-}
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <th>Professor Name</th>
                     <th>Get Notes</th>
                     <th>Delete Course</th>
+                    <th>Favorites</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +65,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <input type="hidden" name="courseID" value="<?= $course['id'] ?>">
                             <button type="submit" class="btn btn-danger">Delete from schedule</button>
                         </form>
+                    </td>
+                    <td>
+                        <?php $favorites = getFavorite($_SESSION['computingId'], $course['id']);
+                            foreach ($favorites as $favorite): ?>
+                            <?php
+                            $checkPath = "notes/" . $favorite['computing_id'] . ".pdf";
+                            if (file_exists($checkPath)) {
+                                $filePath = "../notes/" . $favorite['computing_id'] . ".pdf";
+                            } else {
+                                $filePath = "../notes/example.pdf";
+                            }
+                        ?>
+                        <p><?php echo $favorite['computing_id'] ?></p>
+                        <a href="<?php echo htmlspecialchars($filePath); ?>">View Note</a>
+                            <form action="schedule.php" method="POST">
+                                <input type="hidden" name="note_id" value="<?= $favorite['note_id'] ?>">
+                                <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
+                                <button type="submit" class="btn btn-primary">Unfavorite Note</button>
+                            </form>
+                        <?php endforeach; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

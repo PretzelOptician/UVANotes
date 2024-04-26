@@ -6,14 +6,20 @@ require("database-requests.php");
 
 <?php 
 
-$schedule = getSchedule($_SESSION['computingId']);
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     if (isset($_GET['course'])){
         $course= $_GET['course'];
     }
-    $success = addScheduleCourse($_SESSION['computingId'], $course);
+    if (isset($_POST['course_id'])){
+        $success = addScheduleCourse($_SESSION['computingId'], $course);
+    }
+    if (isset($_POST['note_id'])){
+        $noteId = $_POST['note_id'];
+        $success = addFavorite($_SESSION['computingId'], $noteId, $course);
+    }
 }
+
+$schedule = getSchedule($_SESSION['computingId']);
 
 if (isset($_GET['course'])){
     $course= $_GET['course'];
@@ -115,6 +121,7 @@ foreach ($schedule as $eachCourse){
     <?php endif; ?>
     <?php if ($courseAdded): ?>
         <form action="notes.php?course=<?php echo $course ?>" method="POST">
+            <input type="hidden" name="course_id" value="<?= $course ?>">
             <button type="submit" class="btn btn-secondary">Add course to schedule</button>
         </form>
     <?php endif; ?>
@@ -128,6 +135,7 @@ foreach ($schedule as $eachCourse){
             <th><b>Date Uploaded (YYYY-MM-DD)</b></th>        
             <th><b>Rating</b></th> 
             <th><b>Link</b></th>
+            <th><b>Favorite Note</b></th>
         </tr>
         </thead>
         <!-- iterate array of results, display the existing requests -->
@@ -145,7 +153,19 @@ foreach ($schedule as $eachCourse){
             }
             ?>
             <td><a href="<?php echo htmlspecialchars($filePath); ?>">View Note</a></td>
-            
+            <?php if(count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) < 1): ?>
+            <td>
+                <form action="notes.php?course=<?php echo $course ?>" method="POST">
+                    <input type="hidden" name="note_id" value="<?= $note['note_id'] ?>">
+                    <button type="submit" class="btn btn-primary">Favorite Note</button>
+                </form>
+            </td>
+            <?php endif; ?>
+            <?php if(count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) > 0): ?>
+            <td>
+                <p>Note is already favorited!</p>
+            </td>
+            <?php endif; ?>
         </tr>
         <?php endforeach; ?>  
 
