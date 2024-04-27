@@ -266,4 +266,49 @@ function getFavoriteByNoteID($computingId, $noteId, $courseId)
 
    return $result;
 }
+
+function addRating($rating, $comment)
+{
+
+   global $db;
+
+   $query = "INSERT INTO Rating (value, comment) VALUES (:value, :comment)";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':value', $rating);
+   $statement->bindParam(':comment', $comment);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
+
+function getRatingID()
+{
+   global $db;
+
+   $query = "SELECT LAST_INSERT_ID() AS last_id;";
+   $statement = $db->prepare($query);
+   
+   $statement->execute();
+   $result = $statement->fetchAll();
+   $statement->closeCursor();
+
+   return $result;
+}
+
+function addNoteRating($ratingId, $noteId)
+{
+   global $db;
+
+   $query = "INSERT INTO NoteRating (rating_id, note_id) VALUES (:ratingId, :noteId)";
+   $statement = $db->prepare($query);
+   $statement->bindParam(':ratingId', $ratingId);
+   $statement->bindParam(':noteId', $noteId);
+   
+   $success = $statement->execute();
+   $statement->closeCursor();
+
+   return $success;
+}
 ?>

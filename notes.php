@@ -1,6 +1,8 @@
 <?php 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 session_start();
-require("connect-db.php");    // include("connect-db.php");
+require("connect-db.php"); 
 require("database-requests.php");
 ?>
 
@@ -16,6 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     if (isset($_POST['note_id'])){
         $noteId = $_POST['note_id'];
         $success = addFavorite($_SESSION['computingId'], $noteId, $course);
+    }
+    if (isset($_POST['rating']) && isset($_POST['comment'])){
+        $noteId = $_POST['note_id'];
+        $rating = $_POST['rating'];
+        $comment = $_POST['comment'];
+        $success = addRating($rating, $comment);
+        $ratingArray = getRatingID();
+        $ratingId=$ratingArray[0]['last_id'];
+        $success2 = addNoteRating($ratingId, $noteId);
     }
 }
 
@@ -136,6 +147,7 @@ foreach ($schedule as $eachCourse){
             <th><b>Rating</b></th> 
             <th><b>Link</b></th>
             <th><b>Favorite Note</b></th>
+            <th><b>Add Rating (1-5)</b></th>
         </tr>
         </thead>
         <!-- iterate array of results, display the existing requests -->
@@ -166,6 +178,14 @@ foreach ($schedule as $eachCourse){
                 <p>Note is already favorited!</p>
             </td>
             <?php endif; ?>
+            <td>
+                <form action="notes.php?course=<?php echo $course ?>" method="POST">
+                    <input type="hidden" name="note_id" value="<?= $note['note_id'] ?>">
+                    <input type="number" name="rating" placeholder="3.5" style="width:50px;">
+                    <input type="text" name="comment" placeholder="Good visuals!" style="width:150px;">
+                    <button type="submit" class="btn btn-primary" style="width:100px; height:40px;">Rate Note</button>
+                </form>
+            </td>
         </tr>
         <?php endforeach; ?>  
 
