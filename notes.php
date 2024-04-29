@@ -127,10 +127,10 @@ foreach ($schedule as $eachCourse){
                 </div>
             </div>
         </div>
-    <?php else: ?>
+    <?php elseif (isset($_SESSION['computingId'])): ?>
         <button class="btn btn-primary my-3" onclick="openModal()">Add Note</button>
     <?php endif; ?>
-    <?php if ($courseAdded): ?>
+    <?php if (isset($_SESSION['computingId']) && $courseAdded): ?>
         <form action="notes.php?course=<?php echo $course ?>" method="POST">
             <input type="hidden" name="course_id" value="<?= $course ?>">
             <button type="submit" class="btn btn-secondary">Add course to schedule</button>
@@ -146,8 +146,10 @@ foreach ($schedule as $eachCourse){
             <th><b>Date Uploaded (YYYY-MM-DD)</b></th>        
             <th><b>Rating</b></th> 
             <th><b>Link</b></th>
+            <?php if (isset($_SESSION['computingId'])): ?>
             <th><b>Favorite Note</b></th>
             <th><b>Add Rating (1-5)</b></th>
+            <?php endif; ?>
         </tr>
         </thead>
         <!-- iterate array of results, display the existing requests -->
@@ -165,7 +167,8 @@ foreach ($schedule as $eachCourse){
             }
             ?>
             <td><a href="<?php echo htmlspecialchars($filePath); ?>">View Note</a></td>
-            <?php if(count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) < 1): ?>
+            
+            <?php if(isset($_SESSION['computingId']) && count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) < 1): ?>
             <td>
                 <form action="notes.php?course=<?php echo $course ?>" method="POST">
                     <input type="hidden" name="note_id" value="<?= $note['note_id'] ?>">
@@ -173,11 +176,12 @@ foreach ($schedule as $eachCourse){
                 </form>
             </td>
             <?php endif; ?>
-            <?php if(count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) > 0): ?>
+            <?php if(isset($_SESSION['computingId']) && count(getFavoriteByNoteID($_SESSION['computingId'], $note['note_id'], $course)) > 0): ?>
             <td>
                 <p>Note is already favorited!</p>
             </td>
             <?php endif; ?>
+            <?php if(isset($_SESSION['computingId'])): ?>
             <td>
                 <form action="notes.php?course=<?php echo $course ?>" method="POST">
                     <input type="hidden" name="note_id" value="<?= $note['note_id'] ?>">
@@ -186,6 +190,8 @@ foreach ($schedule as $eachCourse){
                     <button type="submit" class="btn btn-primary" style="width:100px; height:40px;">Rate Note</button>
                 </form>
             </td>
+            <?php endif; ?>
+
         </tr>
         <?php endforeach; ?>  
 
